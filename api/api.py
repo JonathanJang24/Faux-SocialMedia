@@ -19,12 +19,15 @@ def index():
 @app.route('/api/login',methods=['POST'])
 def login():
     data = json.loads(request.data)
-    return {'200':'signup method successful'}
+    username = data['username']
+    password = data['password']
+    return {'200':'logged in'}
+
 
 @app.route('/api/signup',methods=['POST'])
 def signup():
     data = json.loads(request.data)
-    return {'200':'signed up'}
+    return {'200':'signup method successful'}
 
 @app.route('/api/create_post',methods=['POST'])
 def createpost():

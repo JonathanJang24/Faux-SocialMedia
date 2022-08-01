@@ -22,4 +22,5 @@ const LoginLayout = () => {
         </>
     )
 }
+
 export default LoginLayout

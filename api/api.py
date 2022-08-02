@@ -27,6 +27,13 @@ def login():
 @app.route('/api/signup',methods=['POST'])
 def signup():
     data = json.loads(request.data)
+    username = data['username']
+    password = data['password']
+    email = data['email']
+    first_name = data['first_name']
+    last_name = data['last_name']
+    birthdate = data['birthdate']
+    
     return {'200':'signup method successful'}
 
 @app.route('/api/create_post',methods=['POST'])

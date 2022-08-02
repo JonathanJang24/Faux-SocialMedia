@@ -7,6 +7,8 @@ class User(db.Model):
     password = db.Column(db.Text, nullable=False)
     firstname = db.Column(db.Text, nullable=False)
     lastname = db.Column(db.Text, nullable=False)
+    birthdate = db.Column(db.Text, nullable=False)
+    
 
 # db model for posts
 class Post(db.Model):

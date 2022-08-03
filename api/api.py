@@ -3,7 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from decouple import config
 from dbModels import User, Post, Comments
 from sharedModels import db
+import bcrypt
 
+salt = bcrypt.gensalt()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config('sql_path',default='')
 
@@ -21,18 +23,24 @@ def login():
     data = json.loads(request.data)
     username = data['username']
     password = data['password']
-    return {'200':'logged in'}
+
+    # HASHED will be the hashed user password from sql db
+    if bcrypt.checkpw(password, hashed):
+        return {'200':'logged in'}
+    else:
+        return {'400':'incorrect password'}
 
 
 @app.route('/api/signup',methods=['POST'])
 def signup():
     data = json.loads(request.data)
     username = data['username']
-    password = data['password']
+    password = bcrypt.hashpw(data['password'].encode('utf8'),salt)
     email = data['email']
     first_name = data['first_name']
     last_name = data['last_name']
     birthdate = data['birthdate']
+    print(password)
     
     return {'200':'signup method successful'}
 

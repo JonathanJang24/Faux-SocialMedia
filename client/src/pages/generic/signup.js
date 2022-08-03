@@ -32,6 +32,7 @@ const Signup = () => {
         })
     }
 
+    // check for matching pasword and verification passwd
     return (
         <>
             <h1>Signup</h1>

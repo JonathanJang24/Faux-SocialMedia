@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
-from dbModels import User, Post, Comments
+from dbModels import User
 from sharedModels import db
 import bcrypt
 
@@ -11,9 +11,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config('sql_path',default='')
 
 #---------------------------------------------------------------
 # have not created tables yet, might change table structure later
-db.init_app(app)
+db = SQLAlchemy(app)
 #---------------------------------------------------------------
-
+   
 @app.route('/')
 def index():
     return {'200':'get successful.'}
@@ -22,13 +22,15 @@ def index():
 def login():
     data = json.loads(request.data)
     username = data['username']
-    password = data['password']
-
-    # HASHED will be the hashed user password from sql db
-    if bcrypt.checkpw(password, hashed):
-        return {'200':'logged in'}
-    else:
-        return {'400':'incorrect password'}
+    password = data['password'].encode('utf-8')
+    user = User.query.filter_by(username=username).first()
+    if(user):
+        # HASHED will be the hashed user password from sql db
+        if bcrypt.checkpw(password,user.password.encode('utf-8')):
+            return {'200':'logged in'}
+        else:
+            return {'402':'incorrect password'}
+    return {'401':'user not found'}
 
 
 @app.route('/api/signup',methods=['POST'])
@@ -40,8 +42,13 @@ def signup():
     first_name = data['first_name']
     last_name = data['last_name']
     birthdate = data['birthdate']
-    print(password)
+
+    if(User.query.filter_by(username=username).first()):
+        return {'400':'User already exists'}
     
+    user = User(username=username,password=password,firstname=first_name,lastname=last_name,birthdate=birthdate,email=email,)
+    db.session.add(user)
+    db.session.commit()
     return {'200':'signup method successful'}
 
 @app.route('/api/create_post',methods=['POST'])

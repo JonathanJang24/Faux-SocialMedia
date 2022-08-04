@@ -4,17 +4,16 @@ import {Outlet, Link} from 'react-router-dom'
 const LoginLayout = () => {
     return (
         <>
-        
-            <nav>
-                <ul>
-                    <li>
-                        <Link className="link-class" to="/">Home</Link>
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <ul class="navbar-nav mr-auto">
+                    <li className="nav-item">
+                        <Link className="nav-link link-class" to="/">Home</Link>
                     </li>
-                    <li>
-                        <Link className="link-class" to="/login">Login</Link>
+                    <li className="nav-item"> 
+                        <Link className="nav-link link-class" to="/login">Login</Link>
                     </li>
-                    <li>
-                        <Link className="link-class" to="/signup">Signup</Link>
+                    <li className="nav-item">
+                        <Link className="nav-link link-class" to="/signup">Signup</Link>
                     </li>
                 </ul>
             </nav>

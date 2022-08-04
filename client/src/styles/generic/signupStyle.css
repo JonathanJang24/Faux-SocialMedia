@@ -1,0 +1,32 @@
+.signup-container{
+    height: fit-content;
+    background-color: #BFAB25;
+    border-radius: 8px;
+    color: white;
+    width: fit-content;
+    margin: 6rem auto 8.1rem auto;
+}
+#signup-button{
+    border: none;
+    color: white;
+    background-color: #0197f6;
+    width: 153px;
+    height: 42.3px;
+    margin: 0 auto;
+    border-radius: 21px;
+    transition: background-color .5s linear;
+}
+#signup-button:hover{
+    background-color: #57C4E5
+}
+.signup-container a{
+    color: cornflowerblue;
+    text-decoration: none;
+}
+.signup-container a:hover{
+    color: lightskyblue 
+}
+.signup-error{
+    color: red;
+    text-align: center;
+}

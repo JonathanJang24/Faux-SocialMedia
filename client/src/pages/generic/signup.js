@@ -1,8 +1,10 @@
 import {React, useState} from 'react'
+import "../../styles/generic/signupStyle.css"
 
 const Signup = () => {
 
     const [signupInfo,setSignupInfo] = useState({'username':'','password':'','password_check':'','email':'','first_name':'','last_name':'','birthdate':''})
+    const [error, setError] = useState(" ")
 
     const handleFormChange = (event) => {
         const name = event.target.name
@@ -10,32 +12,50 @@ const Signup = () => {
         setSignupInfo(values => ({...values, [name]:value}))
     }
 
+    const validate = () => {
+        if(typeof signupInfo['password'] !== 'undefined' && typeof signupInfo['password_check']){
+            if(signupInfo['password'] != signupInfo['password_check']){
+                setError("Passwords should match")
+                return false
+            }
+        }
+        return true
+    }
+
     const handleFormSubmit = (event) => {
         event.preventDefault()
-        fetch('/api/signup',{
-            method: 'POST',
-            body: JSON.stringify({
-                username: signupInfo['username'],
-                password: signupInfo['password'],
-                email: signupInfo['email'],
-                first_name: signupInfo['first_name'],
-                last_name: signupInfo['last_name'],
-                birthdate: signupInfo['birthdate']
-            }),
-            headers:{
-                'Content-type':'application/json; charset=UTF-8'
-            }
-        }).then(response => {
-            return response.json()
-        }).then(message => {
-            console.log(message)
-        })
+
+        if(validate()){
+            fetch('/api/signup',{
+                method: 'POST',
+                body: JSON.stringify({
+                    username: signupInfo['username'],
+                    password: signupInfo['password'],
+                    email: signupInfo['email'],
+                    first_name: signupInfo['first_name'],
+                    last_name: signupInfo['last_name'],
+                    birthdate: signupInfo['birthdate']
+                }),
+                headers:{
+                    'Content-type':'application/json; charset=UTF-8'
+                }
+            }).then(response => {
+                return response.json()
+            }).then(message => {
+                console.log(message)
+                if(message[400]){
+                    setError("User already exists")
+                }   
+            })
+        }
     }
 
     // check for matching pasword and verification passwd
     return (
         <>
-            <h1>Signup</h1>
+            <div className="signup-container">
+            <div className="login-content">
+            <h1 id="card-title">Signup</h1>
             <form onSubmit={handleFormSubmit}>
                 <label>Username:
                     <input type="text" name="username" value={signupInfo['username']} onChange={handleFormChange} required/>
@@ -58,8 +78,12 @@ const Signup = () => {
                 <label>Birthdate:
                     <input type="date" name="birthdate" value={signupInfo['birthdate']} onChange={handleFormChange} required/>
                 </label>
-                <input type="submit" value="Signup"/>
+                <input id="signup-button" type="submit" value="Signup"/>
             </form>
+            <p className="login-signup">Already have an account? <a href="/login">Login here</a></p>
+            <p className="form-error">{error}</p>
+            </div>
+            </div>
         </>
     )
 }

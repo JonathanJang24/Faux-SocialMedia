@@ -6,7 +6,12 @@ const UserLayout = () => {
         <>
             <nav>
                 <ul>
-                    
+                    <li>
+                        <Link>Home</Link>
+                    </li>
+                    <li>
+                        <Link>About Me</Link>
+                    </li>
                 </ul>
             </nav>
         </>

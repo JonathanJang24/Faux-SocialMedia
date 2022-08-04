@@ -4,6 +4,7 @@ import '../../styles/generic/loginStyle.css'
 const Login = () => {
 
     const [loginInfo, setLoginInfo] = useState({'username':'','password':''})
+    const [error, setError] = useState("")
 
     const handleFormChange = (event) => {
         const name = event.target.name
@@ -26,21 +27,33 @@ const Login = () => {
             return response.json()
         }).then(message => {
             console.log(message)
+            if(message[401]){
+                setError("Username not found")
+            }
+            else if(message[402]){
+                setError("Incorrect password")
+            }
         })
     }
 
     return(
         <>
-            <h1>Login form</h1>
-            <form onSubmit={handleSubmit}>
-                <label>Username:
-                    <input type="text" name="username" value={loginInfo['username']} onChange={handleFormChange} required/>
-                </label>
-                <label>Password:
-                    <input type="password" name="password" value={loginInfo['password']} onChange={handleFormChange} required/>
-                </label>
-                <input type="submit" value="Login"/>
-            </form>
+            <div className="login-container">
+                <div className="login-content">
+                    <h1 id="card-title">Login</h1>
+                        <form onSubmit={handleSubmit}>
+                            <label>Username:
+                                <input type="text" name="username" value={loginInfo['username']} onChange={handleFormChange} required/>
+                            </label>
+                            <label>Password:
+                                <input type="password" name="password" value={loginInfo['password']} onChange={handleFormChange} required/>
+                            </label>
+                            <input className="login-button" type="submit" value="Login"/>
+                        </form>
+                        <p className="login-signup">Don't have an account? <a href="/signup">Signup here</a></p>
+                        <p className="form-error">{error}</p>
+                </div>
+            </div>
         </>
     )
 }

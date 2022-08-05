@@ -43,7 +43,10 @@ const Signup = () => {
                 return response.json()
             }).then(message => {
                 console.log(message)
-                if(message[400]){
+                if(message[200]){
+                    setSignupInfo({'username':'','password':'','password_check':'','email':'','first_name':'','last_name':'','birthdate':''})
+                }
+                else if(message[400]){
                     setError("User already exists")
                 }   
             })

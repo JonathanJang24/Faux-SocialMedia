@@ -5,7 +5,7 @@ const LoginLayout = () => {
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <ul class="navbar-nav mr-auto">
+                <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
                         <Link className="nav-link link-class" to="/">Home</Link>
                     </li>

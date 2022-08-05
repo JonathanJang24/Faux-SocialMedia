@@ -51,6 +51,21 @@ def signup():
     db.session.commit()
     return {'200':'signup method successful'}
 
+def feed_serializer(post):
+    return {
+        'post_id':post.post_id,
+        'user':post.user,
+        'title':post.title,
+        'content':post.content,
+        'likes':post.likes,
+        'dislikes':post.dislikes
+    }
+
+@app.route('/api/feed/<user>',methods=['GET'])
+def getfeed(user):
+    feed = Post.query.filter_by(user=user).all()
+    return jsonify(([*map(feed_serializer,feed)]))
+
 @app.route('/api/create_post',methods=['POST'])
 def createpost():
     data = json.loads(request.data)

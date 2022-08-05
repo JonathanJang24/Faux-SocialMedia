@@ -1,9 +1,23 @@
 import {React} from 'react'
+import '../../styles/generic/homeStyle.css'
 
 const Home = () => {
     return (
         <>
-            <h1>Home</h1>
+            <div className="home-banner">
+                <h1>Faux Social Media</h1>
+                <p>A full stack web app demonstrating CRUD and database management</p>
+                <h2>Functionality</h2>
+                <p>The web app allows for unique individual account creation and login, where users can post and interact with other user's posts.</p>
+                <h2>Tech Stack</h2>
+                <ul>
+                    <li>Flask</li>
+                    <li>React.js</li>
+                    <li>MySql</li>
+                    <li>HTML5</li>
+                    <li>CSS3</li>
+                </ul>
+            </div>
         </>
     )
 }

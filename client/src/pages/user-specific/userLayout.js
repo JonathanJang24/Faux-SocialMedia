@@ -4,14 +4,13 @@ import {Outlet, Link} from 'react-router-dom'
 const UserLayout = () => {
     return(
         <>
-            <h1>Hello</h1>
-            <nav>
-                <ul>
-                    <li>
-                        <Link to="/feed">Home</Link>
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <ul className="navbar-nav mr-auto">
+                    <li className="nav-item">
+                        <Link className="nav-link link-class" to="feed">Home</Link>
                     </li>
-                    <li>
-                        <Link to="/account">About Me</Link>
+                    <li className="nav-item">
+                        <Link className="nav-link link-class" to="/account">About Me</Link>
                     </li>
                 </ul>
             </nav>

@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
-from dbModels import User
+from dbModels import User, Post
 from sharedModels import db
 import bcrypt
 
@@ -13,7 +13,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config('sql_path',default='')
 # have not created tables yet, might change table structure later
 db = SQLAlchemy(app)
 #---------------------------------------------------------------
-   
+
 @app.route('/')
 def index():
     return {'200':'get successful.'}
@@ -65,6 +65,7 @@ def feed_serializer(post):
 def getfeed(user):
     feed = Post.query.filter_by(user=user).all()
     return jsonify(([*map(feed_serializer,feed)]))
+    return {'user':user}
 
 @app.route('/api/create_post',methods=['POST'])
 def createpost():

@@ -1,7 +1,13 @@
 import {React, useState} from 'react'
 import "../../styles/generic/signupStyle.css"
+import Cookies from 'universal-cookie'
+import {Navigate} from 'react-router-dom'
 
 const Signup = () => {
+
+    const cookies = new Cookies()
+
+    const currentUser = cookies.get('user')
 
     const [signupInfo,setSignupInfo] = useState({'username':'','password':'','password_check':'','email':'','first_name':'','last_name':'','birthdate':''})
     const [error, setError] = useState(" ")
@@ -14,7 +20,7 @@ const Signup = () => {
 
     const validate = () => {
         if(typeof signupInfo['password'] !== 'undefined' && typeof signupInfo['password_check']){
-            if(signupInfo['password'] != signupInfo['password_check']){
+            if(signupInfo['password'] !== signupInfo['password_check']){
                 setError("Passwords should match")
                 return false
             }
@@ -54,7 +60,7 @@ const Signup = () => {
     }
 
     // check for matching pasword and verification passwd
-    return (
+    return currentUser!=='' ? <Navigate to="/feed"/> : (
         <>
             <div className="signup-container">
             <div className="login-content">

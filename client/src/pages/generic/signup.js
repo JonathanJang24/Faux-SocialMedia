@@ -60,7 +60,7 @@ const Signup = () => {
     }
 
     // check for matching pasword and verification passwd
-    return currentUser!=='' ? <Navigate to="/feed"/> : (
+    return currentUser!==''&&currentUser!==undefined ? <Navigate to="/feed"/> : (
         <>
             <div className="signup-container">
             <div className="login-content">

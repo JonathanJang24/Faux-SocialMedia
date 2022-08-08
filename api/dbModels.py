@@ -18,6 +18,7 @@ class User(db.Model):
 # db model for posts
 class Post(db.Model):
     post_id = db.Column(db.Integer, primary_key=True)
+    posted_date = db.Column(db.Text, nullable=False)
     user = db.Column(db.Text, nullable=False)
     title = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text,nullable=False)

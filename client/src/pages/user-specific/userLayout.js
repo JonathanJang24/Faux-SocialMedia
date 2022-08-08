@@ -7,7 +7,7 @@ const UserLayout = () => {
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
-                        <Link className="nav-link link-class" to="feed">Home</Link>
+                        <Link className="nav-link link-class" to="feed">Feed</Link>
                     </li>
                     <li className="nav-item">
                         <Link className="nav-link link-class" to="/account">About Me</Link>

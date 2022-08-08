@@ -14,25 +14,44 @@ const UserFeed = () => {
 
     const [feed, setFeed] = useState([])
 
-    useEffect(() => {   
+    useEffect(() => {  
         fetch(`/api/feed/${currentUser}`)
         .then(response => {
             return response.json()
         }).then(data => {
-            console.log(data)
-            // setFeed(data)
+            setFeed(data)
         })
     },[])
 
-    return currentUser==='' ? <Navigate to="/login"/> : (
+    const updateFeed = () => {
+        console.log("clicked")
+        fetch(`/api/feed/${currentUser}`).then(response => {
+            if(response.ok){
+                return response.json()
+            }
+        }).then(data => {
+            console.log(data)
+            setFeed(data)
+        })
+    }
+
+    return currentUser===''||currentUser===undefined ? <Navigate to="/login"/> : (
         <>
             <h1>Feed</h1>
 
-            <CreatePost/>
+            <CreatePost update={updateFeed}/>
 
             {feed.map(post => {
                 return(
-                    <Post/>
+                    <Post 
+                    key={post.post_id} 
+                    user={post.user}
+                    date={post.posted_date}
+                    title={post.title}
+                    content={post.content}
+                    likes={post.likes}
+                    dislikes={post.dislikes}
+                    />
                 )
             })}
         </>

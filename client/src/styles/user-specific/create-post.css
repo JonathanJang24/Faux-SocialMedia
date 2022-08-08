@@ -1,0 +1,8 @@
+.create-post-card{
+    width: 60%;
+    margin: 50px auto;
+    background-color: white;
+    color: black;
+    padding: 25px;
+    border-radius: 15px;
+}

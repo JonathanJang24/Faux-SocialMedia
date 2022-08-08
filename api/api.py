@@ -4,6 +4,7 @@ from decouple import config
 from dbModels import User, Post
 from sharedModels import db
 import bcrypt
+from datetime import date
 
 salt = bcrypt.gensalt()
 app = Flask(__name__)
@@ -18,6 +19,7 @@ db = SQLAlchemy(app)
 def index():
     return {'200':'get successful.'}
 
+# basic login method
 @app.route('/api/login',methods=['POST'])
 def login():
     data = json.loads(request.data)
@@ -32,7 +34,7 @@ def login():
             return {'402':'incorrect password'}
     return {'401':'user not found'}
 
-
+# signup POST method for users
 @app.route('/api/signup',methods=['POST'])
 def signup():
     data = json.loads(request.data)
@@ -51,9 +53,11 @@ def signup():
     db.session.commit()
     return {'200':'signup method successful'}
 
+# allows for json serialization of post feed 
 def feed_serializer(post):
     return {
         'post_id':post.post_id,
+        'posted_date':post.posted_date,
         'user':post.user,
         'title':post.title,
         'content':post.content,
@@ -61,16 +65,31 @@ def feed_serializer(post):
         'dislikes':post.dislikes
     }
 
-@app.route('/api/feed/<user>',methods=['GET'])
-def getfeed(user):
-    feed = Post.query.filter_by(user=user).all()
+# general get method for a user's feed
+@app.route('/api/feed/<currUser>',methods=['GET'])
+def getfeed(currUser):
+    feed = Post.query.filter_by(user=currUser).all()
     return jsonify(([*map(feed_serializer,feed)]))
-    return {'user':user}
 
+
+# api route for specific user creating a post
 @app.route('/api/create_post',methods=['POST'])
 def createpost():
-    data = json.loads(request.data)
-    return {'200':'post successful'}
+
+    d = date.today().strftime("%d/%m/%Y")
+
+    try:
+        data = json.loads(request.data)
+        user = data['user']
+        title =  data['title']
+        content = data['content']
+        post = Post(posted_date=d,user=user,title=title,content=content,likes=0,dislikes=0)
+        db.session.add(post)
+        db.session.commit()
+        return {'200':'post successful'}
+    except Exception as e:
+        return {'500':e}
+
 
 @app.route('/api/interact_post',methods=['POST'])
 def interactpost():

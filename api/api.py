@@ -5,17 +5,42 @@ from decouple import config
 from dbModels import User, Post
 from sharedModels import db
 import bcrypt
-from datetime import date
+from datetime import date, timedelta
 
 salt = bcrypt.gensalt()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config('sql_path',default='')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 
 #---------------------------------------------------------------
 # have not created tables yet, might change table structure later
 db = SQLAlchemy(app)
 #---------------------------------------------------------------
 
+class Post(db.Model):
+    post_id = db.Column(db.Integer, primary_key=True)
+    posted_date = db.Column(db.Text, nullable=False)
+    user = db.Column(db.Text, nullable=False)
+    title = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text,nullable=False)
+    likes = db.Column(db.Text, nullable=False)
+    dislikes = db.Column(db.Text, nullable=False)
+
+    def __str__(self):
+        return f'{self.post_id} {self.user} {self.title} {self.content} {self.likes} {self.dislikes}'
+class User(db.Model):
+    user_id = db.Column(db.Integer, primary_key=True)
+    username= db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False)
+    firstname = db.Column(db.Text, nullable=False)
+    lastname = db.Column(db.Text, nullable=False)
+    birthdate = db.Column(db.Text, nullable=False)
+    email = db.Column(db.Text, nullable=False)
+
+    def __str__(self):
+        return f'{self.user_id} {self.username} {self.password} {self.firstname} {self.lastname} {self.birthdate} {self.email}'
+    
 def user_serializer(user):
     return {
         'user_id':user.user_id,
@@ -27,7 +52,7 @@ def user_serializer(user):
 
 @app.route('/')
 def index():
-    feed = User.query.filter_by().all()
+    feed = db.session.query(User).all()
     return jsonify(([*map(user_serializer,feed)]))
     return {'200':'get successful.'}
 
@@ -37,7 +62,7 @@ def login():
     data = json.loads(request.data)
     username = data['username']
     password = data['password'].encode('utf-8')
-    user = User.query.filter_by(username=username).first()
+    user = db.session.query(User).filter_by(username=username).first()
     if(user):
         # HASHED will be the hashed user password from sql db
         if bcrypt.checkpw(password,user.password.encode('utf-8')):
@@ -50,6 +75,10 @@ def login():
 @app.route('/api/signup',methods=['POST'])
 def signup():
     data = json.loads(request.data)
+    exist = db.session.query(User).filter_by(username=data['username']).first()
+    if(exist):
+        return {'400':'User already exists'}
+
     username = data['username']
     password = bcrypt.hashpw(data['password'].encode('utf8'),salt)
     email = data['email']
@@ -57,13 +86,10 @@ def signup():
     last_name = data['last_name']
     birthdate = data['birthdate']
 
-    print(User.query.filter_by(username=username).first())
-    if(User.query.filter_by(username=username).first()):
-        return {'400':'User already exists'}
-    
     user = User(username=username,password=password,firstname=first_name,lastname=last_name,birthdate=birthdate,email=email)
     db.session.add(user)
     db.session.commit()
+
     return {'200':'signup method successful'}
 
 # allows for json serialization of post feed 
@@ -81,7 +107,7 @@ def feed_serializer(post):
 # general get method for a user's feed
 @app.route('/api/feed/<currUser>',methods=['GET'])
 def getfeed(currUser):
-    feed = Post.query.filter_by(user=currUser).order_by(Post.post_id.desc()).all()
+    feed = db.session.query(Post).filter_by(user=currUser).order_by(Post.post_id.desc()).all()
     return jsonify(([*map(feed_serializer,feed)]))
 
 
@@ -99,6 +125,7 @@ def createpost():
         post = Post(posted_date=d,user=user,title=title,content=content,likes=0,dislikes=0)
         db.session.add(post)
         db.session.commit()
+
         return {'200':'post successful'}
     except Exception as e:
         return {'500':e}

@@ -1,12 +1,13 @@
 import {React, useEffect, useState} from 'react'
 import Cookies from 'universal-cookie'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import Post from './components/post.js'
 import CreatePost from './components/createPost.js'
 import "../../styles/user-specific/feed.css"
 
 const UserFeed = () => {
 
+    const navigate = useNavigate()
 
     const cookies = new Cookies()
 
@@ -15,6 +16,7 @@ const UserFeed = () => {
     const [feed, setFeed] = useState([])
 
     useEffect(() => {  
+
         fetch(`/api/feed/${currentUser}`)
         .then(response => {
             return response.json()

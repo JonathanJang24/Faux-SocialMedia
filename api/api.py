@@ -1,3 +1,4 @@
+from re import X
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
@@ -15,8 +16,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config('sql_path',default='')
 db = SQLAlchemy(app)
 #---------------------------------------------------------------
 
+def user_serializer(user):
+    return {
+        'user_id':user.user_id,
+        'username':user.username,
+        'pass':user.password,
+        'first':user.firstname,
+        'last':user.lastname
+    }
+
 @app.route('/')
 def index():
+    feed = User.query.filter_by().all()
+    return jsonify(([*map(user_serializer,feed)]))
     return {'200':'get successful.'}
 
 # basic login method
@@ -45,10 +57,11 @@ def signup():
     last_name = data['last_name']
     birthdate = data['birthdate']
 
+    print(User.query.filter_by(username=username).first())
     if(User.query.filter_by(username=username).first()):
         return {'400':'User already exists'}
     
-    user = User(username=username,password=password,firstname=first_name,lastname=last_name,birthdate=birthdate,email=email,)
+    user = User(username=username,password=password,firstname=first_name,lastname=last_name,birthdate=birthdate,email=email)
     db.session.add(user)
     db.session.commit()
     return {'200':'signup method successful'}
@@ -68,7 +81,7 @@ def feed_serializer(post):
 # general get method for a user's feed
 @app.route('/api/feed/<currUser>',methods=['GET'])
 def getfeed(currUser):
-    feed = Post.query.filter_by(user=currUser).all()
+    feed = Post.query.filter_by(user=currUser).order_by(Post.post_id.desc()).all()
     return jsonify(([*map(feed_serializer,feed)]))
 
 
@@ -76,7 +89,7 @@ def getfeed(currUser):
 @app.route('/api/create_post',methods=['POST'])
 def createpost():
 
-    d = date.today().strftime("%d/%m/%Y")
+    d = date.today().strftime("%m/%d/%Y")
 
     try:
         data = json.loads(request.data)

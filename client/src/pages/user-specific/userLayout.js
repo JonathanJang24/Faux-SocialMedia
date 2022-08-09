@@ -10,7 +10,7 @@ const UserLayout = () => {
                         <Link className="nav-link link-class" to="feed">Feed</Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link link-class" to="/account">About Me</Link>
+                        <Link className="nav-link link-class" to="/account">My Profile</Link>
                     </li>
                 </ul>
             </nav>

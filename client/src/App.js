@@ -16,13 +16,14 @@ function App() {
 
   const currentUser = cookies.get('user')
 
+
   return (
     <div className="App">
 
       <BrowserRouter>
         <Routes>
 
-          <Route path="/" element={currentUser==='' ? <LoginLayout/> : <UserLayout/>}>
+          <Route path="/" element={currentUser===''||currentUser===undefined ? <LoginLayout/> : <UserLayout/>}>
             <Route index element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<Signup/>}/>

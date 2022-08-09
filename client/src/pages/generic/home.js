@@ -1,8 +1,15 @@
 import {React} from 'react'
 import '../../styles/generic/homeStyle.css'
+import Cookies from 'universal-cookie'
+import {Navigate} from 'react-router-dom'
 
 const Home = () => {
-    return (
+
+    const cookies = new Cookies()
+
+    const currentUser = cookies.get('user')
+
+    return currentUser!==''&&currentUser!==undefined ? <Navigate to="/feed"/> :(
         <>
             <div className="home-banner">
                 <h1>Faux Social Media</h1>
@@ -14,6 +21,7 @@ const Home = () => {
                     <li>Flask</li>
                     <li>React.js</li>
                     <li>MySql</li>
+                    <li>Bootstrap</li>
                     <li>HTML5</li>
                     <li>CSS3</li>
                 </ul>

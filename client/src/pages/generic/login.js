@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import '../../styles/generic/loginStyle.css'
 import {Navigate, useNavigate} from 'react-router-dom'
 import Cookies from 'universal-cookie'
@@ -14,6 +14,8 @@ const Login = () => {
     const [loginInfo, setLoginInfo] = useState({'username':'','password':''})
 
     const [error, setError] = useState("")
+
+
 
     const handleFormChange = (event) => {
         const name = event.target.name
@@ -39,6 +41,7 @@ const Login = () => {
             if(message[200]){
                 cookies.set('user',loginInfo['username'])
                 navigate("/feed")
+                navigate(0)
             }
             else if(message[401]){
                 setError("Username not found")
@@ -49,7 +52,7 @@ const Login = () => {
         })
     }
 
-    return currentUser!==''&&currentUser!==undefined ? <Navigate to="/feed"/> : (
+    return currentUser!==''&&currentUser!==undefined ? <Navigate to="/feed"/>: (
         <>
             <div className="login-container">
                 <div className="login-content">

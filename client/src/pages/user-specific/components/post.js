@@ -4,12 +4,12 @@ import '../../../styles/user-specific/post.css'
 const Post = (props) => {
     return(
         <div className="post-card container ">
-            <div className="row">
-                <h5 className="col">{props.user}</h5>
-                <h5 className="col">{props.date}</h5>
-            </div>
             <div className="row justify-content-center">
                 <h3>{props.title}</h3>
+            </div>
+            <div className="row">
+                <p className="col">{props.user}</p>
+                <p className="col">{props.date}</p>
             </div>
             <div className="row justify-content-center">
                 <p>{props.content}</p>

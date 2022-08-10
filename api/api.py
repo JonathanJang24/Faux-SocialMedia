@@ -2,7 +2,7 @@ from re import X
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
-from dbModels import User, Post
+from dbModels import User, Post, Friend
 from sharedModels import db
 import bcrypt
 from datetime import date, timedelta
@@ -11,44 +11,12 @@ salt = bcrypt.gensalt()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = config('sql_path',default='')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
 
 #---------------------------------------------------------------
 # have not created tables yet, might change table structure later
 db = SQLAlchemy(app)
 #---------------------------------------------------------------
 
-class Post(db.Model):
-    post_id = db.Column(db.Integer, primary_key=True)
-    posted_date = db.Column(db.Text, nullable=False)
-    user = db.Column(db.Text, nullable=False)
-    title = db.Column(db.Text, nullable=False)
-    content = db.Column(db.Text,nullable=False)
-    likes = db.Column(db.Text, nullable=False)
-    dislikes = db.Column(db.Text, nullable=False)
-
-    def __str__(self):
-        return f'{self.post_id} {self.user} {self.title} {self.content} {self.likes} {self.dislikes}'
-class User(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
-    username= db.Column(db.Text, nullable=False)
-    password = db.Column(db.Text, nullable=False)
-    firstname = db.Column(db.Text, nullable=False)
-    lastname = db.Column(db.Text, nullable=False)
-    birthdate = db.Column(db.Text, nullable=False)
-    email = db.Column(db.Text, nullable=False)
-
-    def __str__(self):
-        return f'{self.user_id} {self.username} {self.password} {self.firstname} {self.lastname} {self.birthdate} {self.email}'
-    
-def user_serializer(user):
-    return {
-        'user_id':user.user_id,
-        'username':user.username,
-        'pass':user.password,
-        'first':user.firstname,
-        'last':user.lastname
-    }
 
 @app.route('/')
 def index():
@@ -107,7 +75,12 @@ def feed_serializer(post):
 # general get method for a user's feed
 @app.route('/api/feed/<currUser>',methods=['GET'])
 def getfeed(currUser):
-    feed = db.session.query(Post).filter_by(user=currUser).order_by(Post.post_id.desc()).all()
+
+    friends = db.session.query(Friend).filter_by(extender=currUser).all()
+    f = list(map(lambda f: f.recipient, friends))
+    f.append(currUser)
+
+    feed = db.session.query(Post).filter(Post.user.in_((f))).order_by(Post.post_id.desc()).all()
     return jsonify(([*map(feed_serializer,feed)]))
 
 
@@ -130,6 +103,42 @@ def createpost():
     except Exception as e:
         return {'500':e}
 
+def user_serializer(user):
+    return {
+        'user_id':user.user_id,
+        'birthday':user.birthdate,
+        'username':user.username,
+        'pass':user.password,
+        'first':user.firstname,
+        'last':user.lastname,
+        'email':user.email
+    }
+
+@app.route('/api/user_info/<currUser>',methods=['GET'])
+def user_info(currUser):
+    user = db.session.query(User).filter_by(username=currUser).all()
+    return jsonify(([*map(user_serializer,user)]))
+
+
+@app.route('/api/add_friend',methods=['POST'])
+def add_friend():
+    data = json.loads(request.data)
+    extender = data['extender']
+    recipient = data['recipient']
+
+    realUser = db.session.query(User).filter_by(username=recipient).first()
+    if(not realUser):
+        return {'400':'user doesnt exist'}
+
+    exists = db.session.query(Friend).filter_by(extender=extender,recipient=recipient).first()
+    if(exists):
+        return {'401':'already friends'}
+
+    #=======================
+    #ADD LOGIC FOR ADDING FRIEND USER FOR TESTING 
+    #===============================
+
+    return {'200':'Friend Added.','extender':extender,'recipient':recipient}
 
 @app.route('/api/interact_post',methods=['POST'])
 def interactpost():

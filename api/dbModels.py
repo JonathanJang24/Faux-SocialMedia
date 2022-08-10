@@ -28,6 +28,16 @@ class Post(db.Model):
     def __str__(self):
         return f'{self.post_id} {self.user} {self.title} {self.content} {self.likes} {self.dislikes}'
 
+# db model for friend
+class Friend(db.Model):
+    friend_id = db.Column(db.Integer,primary_key=True)
+    extender = db.Column(db.Integer,nullable=False)
+    recipient = db.Column(db.Integer,nullable=False)
+    start_date = db.Column(db.Text,nullable=False)
+
+    def __str__(self):
+        return f'{self.friend_id} {self.extender} {self.recipient} {self.start_date}'
+
 # =============================HAS NOT BEEN INIT==========================    
 # # db model for comments
 # class Comments(db.Model):

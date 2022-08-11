@@ -52,6 +52,7 @@ const Signup = () => {
                 if(message[200]){
                     setSignupInfo({'username':'','password':'','password_check':'','email':'','first_name':'','last_name':'','birthdate':''})
                     setError("")
+                    alert("Signed up!")
                 }
                 else if(message[400]){
                     setError("User already exists")

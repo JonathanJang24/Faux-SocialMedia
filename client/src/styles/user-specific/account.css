@@ -1,0 +1,21 @@
+.account-container{
+    margin: 50px auto;
+    width: fit-content
+}
+.account-card{
+    background: gray;
+    margin: 0;
+    display: inline-grid;
+    grid-template-columns: repeat(2, 300px);
+    grid-template-rows: 300px 50px 50px 50px;
+    gap: 0;
+    align-items: center;
+}
+
+.logout-btn{
+    width: 150px;
+    margin: 0 auto
+}
+.user-info-text{
+    font-size: 14px;
+}

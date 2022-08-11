@@ -1,6 +1,8 @@
 import {React, useState, useEffect} from 'react'
 import Cookies from 'universal-cookie'
 import {Navigate, useNavigate} from 'react-router-dom'
+import Post from './components/post.js'
+import '../../styles/user-specific/account.css'
 
 const UserInfo = () => {
 
@@ -12,14 +14,21 @@ const UserInfo = () => {
 
     const [userInfo, setUserInfo] = useState({})
 
+    const [userPost, setUserPost] = useState([])
+
     useEffect(() => {
         fetch(`/api/user_info/${currentUser}`)
         .then(response => {
             return response.json()
         }).then(data => {
-            console.log(data[0])
             setUserInfo(data[0])
         })
+        fetch(`/api/user_post/${currentUser}`)
+            .then(response => {
+                return response.json()
+            }).then(data => {
+                setUserPost(data)
+            })
     },[])
 
     const handleLogout = () => {
@@ -30,14 +39,34 @@ const UserInfo = () => {
 
     return currentUser===''||currentUser===undefined ? <Navigate to="/login"/> : (
         <>
-            <h1>User information</h1>
-            <h3>Username: {userInfo['username']}</h3>
-            <h3>Name: {userInfo['first']} {userInfo['last']}</h3>
-            <h3>Email: {userInfo['email']}</h3>
-            <h3>Birthday: {userInfo['birthday']}</h3>
+        <div className="account-container">
+        <h1 className="text-center">User information</h1>
+            <div className="account-card">
+                <h3 className="text-center" style={{row:1, column:1}}>picutre holder</h3>
+                <h3 className="text-center user-info-text" style={{row:1, column:2, fontSize:24+"px"}}>Username: {userInfo['username']}</h3>
+                <h3 className="text-center user-info-text" style={{row:2, column:1}}>Name: {userInfo['first']} {userInfo['last']}</h3>
+                <h3 className="text-center user-info-text" style={{row:2, column:2}}>Following: {userInfo['following']}</h3>
+                <h3 className="text-center user-info-text" style={{row:3, column:1}}>Email: {userInfo['email']}</h3>
+                <h3 className="text-center user-info-text" style={{row:3, column:2}}>Followers: {userInfo['followers']}</h3>
+                <h3 className="text-center user-info-text" style={{row:4, column:1}}>Birthday: {userInfo['birthday']}</h3>
 
-            <button className="btn btn-primary" onClick={handleLogout}>Logout</button>
+                <button style={{row:4, column:2}} className="btn btn-primary logout-btn" onClick={handleLogout}>Logout</button>
+            </div>
+            </div>
 
+            {userPost.map(post => {
+                return(
+                    <Post 
+                    key={post.post_id} 
+                    user={post.user}
+                    date={post.posted_date}
+                    title={post.title}
+                    content={post.content}
+                    likes={post.likes}
+                    dislikes={post.dislikes}
+                    />
+                )
+            })}
         </>
     )
 }

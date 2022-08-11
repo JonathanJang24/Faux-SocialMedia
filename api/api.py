@@ -1,4 +1,4 @@
-from re import X
+
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
@@ -117,7 +117,23 @@ def user_serializer(user):
 @app.route('/api/user_info/<currUser>',methods=['GET'])
 def user_info(currUser):
     user = db.session.query(User).filter_by(username=currUser).all()
-    return jsonify(([*map(user_serializer,user)]))
+
+    extend = db.session.query(Friend).filter_by(extender=currUser).all()
+    recieve = db.session.query(Friend).filter_by(recipient=currUser).all()
+
+    user_info = [*map(user_serializer,user)]
+    user_info[0]['following'] = len(extend)
+    user_info[0]['followers'] = len(recieve)
+
+    return jsonify((user_info))
+
+
+@app.route('/api/user_post/<currUser>',methods=['GET'])
+def user_post(currUser):
+
+    posts = db.session.query(Post).filter_by(user=currUser).order_by(Post.post_id.desc()).all()
+
+    return jsonify(([*map(feed_serializer,posts)]))
 
 
 @app.route('/api/add_friend',methods=['POST'])
@@ -134,9 +150,10 @@ def add_friend():
     if(exists):
         return {'401':'already friends'}
 
-    #=======================
-    #ADD LOGIC FOR ADDING FRIEND USER FOR TESTING 
-    #===============================
+    d = date.today().strftime("%m/%d/%Y")
+    follow = Friend(extender=extender, recipient=recipient,start_date=d)
+    db.session.add(follow)
+    db.session.commit()
 
     return {'200':'Friend Added.','extender':extender,'recipient':recipient}
 

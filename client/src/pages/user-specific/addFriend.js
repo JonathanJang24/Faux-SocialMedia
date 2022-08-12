@@ -1,5 +1,6 @@
 import {React, useState} from 'react'
 import Cookies from 'universal-cookie'
+import UserQueryCard from './components/userQueryCard'
 
 const AddFriend = () => {
 
@@ -7,38 +8,43 @@ const AddFriend = () => {
 
     const currentUser = cookies.get('user')
 
-    const [add, setAdd] = useState("")
+    const [query, setQuery] = useState("")
+    const [userRes, setUserRes] = useState([])
 
     const handleChange = (event) => {
-        setAdd(event.target.value)
-    }
+        setQuery(event.target.value)
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        fetch('/api/add_friend',{
-            method:'POST',
-            body: JSON.stringify({
-                extender: currentUser,
-                recipient: add
-            }),
-            headers:{
-                'Content-type':'application/json; charset=UTF-8'
-            }
-        }).then(response => {
-            return response.json()
+        fetch(`/api/find_users/_${event.target.value}`).then(
+            response => {
+                if(response.ok){
+                    return response.json()
+                }
         }).then(message => {
-            console.log(message)
-            setAdd("")
+            if(message[400]){
+                setUserRes([])
+            }
+            else{
+                setUserRes(message)
+            }
+            
         })
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+        <>
             <label>Username:
-                <input value={add} onChange={handleChange} type="text"/>
+                <input value={query} onChange={handleChange} type="text"/>
             </label>
-            <input className="btn btn-primary" type="submit"/>
-        </form>
+
+            {userRes.map(user=> {
+                return(
+                    <UserQueryCard
+                        key={user.user_id}
+                        username={user.username}
+                    />
+                )
+            })}
+        </>
     )
 }
 

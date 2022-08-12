@@ -1,3 +1,7 @@
+.user-pic{
+    width: 150px;
+    margin: 0 auto;
+}
 .account-container{
     margin: 50px auto;
     width: fit-content

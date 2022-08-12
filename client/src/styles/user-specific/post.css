@@ -3,5 +3,10 @@
         background: white;
         color: black;
         margin: 50px auto;
-        padding: 25px
+        padding: 25px;
+        border-radius: 15px;
+        transition: transform .25s ease-in-out
+}
+.post-card:hover{
+        transform: scale(105%)
 }

@@ -155,7 +155,19 @@ def add_friend():
     db.session.add(follow)
     db.session.commit()
 
-    return {'200':'Friend Added.','extender':extender,'recipient':recipient}
+    return {'200':'Friend Added.'}
+
+
+@app.route('/api/find_users/<query>',methods=['GET'])
+def find_user(query):
+    query = query[1:]
+    if(query):
+        matching = db.session.query(User).filter(User.username.contains(query)).all()
+        if(matching):
+            return jsonify(([*map(user_serializer,matching)]))
+        return {'400':'no results'}
+    return {'400':'empty query.'}
+    
 
 @app.route('/api/interact_post',methods=['POST'])
 def interactpost():

@@ -14,7 +14,7 @@ const AddFriend = () => {
     const handleChange = (event) => {
         setQuery(event.target.value)
 
-        fetch(`/api/find_users/_${event.target.value}`).then(
+        fetch(`/api/find_users/${currentUser}/_${event.target.value}`).then(
             response => {
                 if(response.ok){
                     return response.json()
@@ -25,9 +25,9 @@ const AddFriend = () => {
             }
             else{
                 setUserRes(message)
-            }
-            
+            }     
         })
+
     }
 
     return(
@@ -41,6 +41,12 @@ const AddFriend = () => {
                     <UserQueryCard
                         key={user.user_id}
                         username={user.username}
+                        firstname={user.first}
+                        lastname={user.last}
+                        followers={user.recipient}
+                        following={user.extender}
+                        isFollower={user.isFollowed}
+                        isFollowing={user.isFollowing}
                     />
                 )
             })}

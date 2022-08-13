@@ -1,5 +1,7 @@
 import {React, useState} from 'react'
 import Cookies from 'universal-cookie'
+import "../../../styles/user-specific/query-card.css"
+import {FaCheck} from 'react-icons/fa'
 
 const UserQueryCard = (props) => {
 
@@ -27,10 +29,21 @@ const UserQueryCard = (props) => {
         })
     }
 
+    const remFriend = (event) => {
+        event.preventDefault()
+        console.log('clicked')
+    }
+
     return (
         <>
-            <p>{props.username}</p>
-            <button onClick={addFriend}>Add Friend</button>
+            <div className="query-card">
+                <p className="query-card-username query-card-text">{props.username}</p>
+                <p className="query-card-name query-card-text">{props.firstname} {props.lastname}</p>
+                <p className="query-card-text">Followers: {props.followers}</p>
+                <p className="query-card-text">Following: {props.following}</p>
+                {props.isFollowing ? <button onClick={remFriend} className="friended-btn btn btn-primary"><FaCheck/> Friended</button> :<button className="btn btn-primary add-friend-btn" onClick={addFriend}>Add Friend</button> }
+                {props.isFollower ? <p className="query-card-text">You're being followed by them!</p> : <p></p>}
+            </div>
         </>
     )
 

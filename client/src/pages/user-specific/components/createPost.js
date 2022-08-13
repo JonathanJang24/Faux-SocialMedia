@@ -40,6 +40,7 @@ const CreatePost = ({update}) => {
     return (
         <>
             <div className="create-post-card">
+                <h3>Write what's on your mind!</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="create-post-title">Title:</label>

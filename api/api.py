@@ -24,6 +24,17 @@ def index():
     return jsonify(([*map(user_serializer,feed)]))
     return {'200':'get successful.'}
 
+def username_serializer(user):
+    return {
+        'user_id':user.user_id,
+        'username':user.username
+    }
+
+@app.route('/api/usernames',methods=['GET'])
+def users():
+    users = db.session.query(User).all()
+    return jsonify(([*map(username_serializer,users)]))
+
 # basic login method
 @app.route('/api/login',methods=['POST'])
 def login():
@@ -135,7 +146,7 @@ def user_post(currUser):
 
     return jsonify(([*map(feed_serializer,posts)]))
 
-
+# api route to add friend from user search query
 @app.route('/api/add_friend',methods=['POST'])
 def add_friend():
     data = json.loads(request.data)
@@ -157,6 +168,15 @@ def add_friend():
 
     return {'200':'Friend Added.'}
 
+@app.route('/api/rem_friend',methods=['POST'])
+def rem_riend():
+    data = json.loads(request.data)
+    extender = data['extender']
+    recipient = data['recipient']
+    if(db.session.query(Friend).filter_by(extender=extender,recipient=recipient).delete()):
+        db.session.commit()
+        return {'200':'Friend Removed'}
+    return {'401':'Already removed'}
 
 @app.route('/api/find_users/<currUser>/<query>',methods=['GET'])
 def find_user(currUser,query):

@@ -1,15 +1,20 @@
 import {React} from 'react'
 import '../../../styles/user-specific/post.css'
+import Cookies from 'universal-cookie'
 
 const Post = (props) => {
+
+    const cookies = new Cookies()
+
+    const currentUser = cookies.get('user')
+
     return(
         <div className="post-card container ">
             <div className="row justify-content-center">
                 <h3>{props.title}</h3>
             </div>
             <div className="row">
-                <p className="col">{props.user}</p>
-                <p className="col">{props.date}</p>
+                {props.user===currentUser ? <p className="col">{props.user}</p> : <a href={"/user/"+props.user} className="col">{props.user}</a>}
             </div>
             <div className="row justify-content-center">
                 <p>{props.content}</p>

@@ -11,8 +11,10 @@ const UserQueryCard = (props) => {
 
     const addUser = props.username
 
+    const updateQuery = props.updateQuery
+
     const addFriend = (event) => {
-        event.preventDefault()
+
         fetch('/api/add_friend',{
             method:'POST',
             body: JSON.stringify({
@@ -26,12 +28,26 @@ const UserQueryCard = (props) => {
             return response.json()
         }).then(message => {
             console.log(message)
+            updateQuery()
         })
     }
 
     const remFriend = (event) => {
-        event.preventDefault()
-        console.log('clicked')
+        fetch('/api/rem_friend',{
+            method:'POST',
+            body: JSON.stringify({
+                extender: currentUser,
+                recipient:addUser
+            }),
+            headers:{
+                'Content-type':'application/json; charset=UTF-8'
+            }
+        }).then(response => {
+            return response.json()
+        }).then(message=>{
+            console.log(message)
+            updateQuery()
+        })
     }
 
     return (

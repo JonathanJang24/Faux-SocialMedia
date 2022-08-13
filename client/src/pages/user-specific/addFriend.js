@@ -27,7 +27,22 @@ const AddFriend = () => {
                 setUserRes(message)
             }     
         })
+    }
 
+    const updateQuery = () => {
+        fetch(`/api/find_users/${currentUser}/_${query}`).then(
+            response => {
+                if(response.ok){
+                    return response.json()
+                }
+        }).then(message => {
+            if(message[400]){
+                setUserRes([])
+            }
+            else{   
+                setUserRes(message)
+            }     
+        })
     }
 
     return(
@@ -47,6 +62,7 @@ const AddFriend = () => {
                         following={user.extender}
                         isFollower={user.isFollowed}
                         isFollowing={user.isFollowing}
+                        updateQuery={updateQuery}
                     />
                 )
             })}

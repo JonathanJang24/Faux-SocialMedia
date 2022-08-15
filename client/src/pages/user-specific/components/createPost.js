@@ -1,4 +1,4 @@
-import {React,useState} from 'react'
+import React,{useState} from 'react'
 import '../../../styles/user-specific/create-post.css'
 import Cookies from 'universal-cookie'
 

@@ -1,4 +1,4 @@
-import {React} from 'react'
+import React from 'react'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from './pages/generic/home.js'
 import Login from './pages/generic/login.js'
@@ -12,7 +12,7 @@ import OtherUser from './pages/user-specific/otherUser.js'
 import Cookies from 'universal-cookie'
 
 
-function App() {
+const App = () => {
 
   const cookies = new Cookies()
 
@@ -21,7 +21,6 @@ function App() {
 
   return (
     <div className="App">
-
       <BrowserRouter>
         <Routes>
 
@@ -38,7 +37,7 @@ function App() {
       </BrowserRouter>
 
     </div>
-  );
+  )
 }
 
 export default App;

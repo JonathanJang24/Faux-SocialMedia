@@ -1,4 +1,4 @@
-import {React} from 'react'
+import React from 'react'
 import '../../styles/generic/homeStyle.css'
 import Cookies from 'universal-cookie'
 import {Navigate} from 'react-router-dom'

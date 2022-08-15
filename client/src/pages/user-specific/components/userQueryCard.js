@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import React,{useState} from 'react'
 import Cookies from 'universal-cookie'
 import "../../../styles/user-specific/query-card.css"
 import {FaCheck} from 'react-icons/fa'

@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import React, {useState} from 'react'
 import "../../styles/generic/signupStyle.css"
 import Cookies from 'universal-cookie'
 import {Navigate} from 'react-router-dom'

@@ -183,26 +183,28 @@ def find_user(currUser,query):
     query = query[1:]
     if(query):
         matching = db.session.query(User).filter(User.username.contains(query)).all()
-        if(matching):
-            queryList = [*map(user_serializer,matching)]
+        queryList = list([*map(user_serializer,matching)])
+        if(queryList):
             for i in queryList:
-                # mapping following/followers list into purely usernames
-                recipientList = list(map(lambda r: r.extender, db.session.query(Friend).filter_by(recipient=i['username']).all()))
-                extenderList = list(map(lambda e: e.recipient, db.session.query(Friend).filter_by(extender=i['username']).all()))
-                # number of followers/followings
-                i['recipient']=len(recipientList)
-                i['extender']=len(extenderList)
-                # checks if current user is following/follower
-                if(currUser in recipientList):
-                    i['isFollowing']=True
+                if(i['username']==currUser):
+                    queryList.remove(i)
                 else:
-                    i['isFollowing']=False
-                if(currUser in extenderList):
-                    i['isFollowed']=True
-                else:
-                    i['isFollowed']=False
-            return jsonify(queryList)
-        return {'400':'no results'}
+                    # mapping following/followers list into purely usernames
+                    recipientList = list(map(lambda r: r.extender, db.session.query(Friend).filter_by(recipient=i['username']).all()))
+                    extenderList = list(map(lambda e: e.recipient, db.session.query(Friend).filter_by(extender=i['username']).all()))
+                    # number of followers/followings
+                    i['recipient']=len(recipientList)
+                    i['extender']=len(extenderList)
+                    # checks if current user is following/follower
+                    if(currUser in recipientList):
+                        i['isFollowing']=True
+                    else:
+                        i['isFollowing']=False
+                    if(currUser in extenderList):
+                        i['isFollowed']=True
+                    else:
+                        i['isFollowed']=False
+        return  {'400':'no results'} if queryList==None else jsonify(queryList)
     return {'400':'empty query.'}
     
 

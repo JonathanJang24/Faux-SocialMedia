@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import React,{useState} from 'react'
 import Cookies from 'universal-cookie'
 import UserQueryCard from './components/userQueryCard'
 

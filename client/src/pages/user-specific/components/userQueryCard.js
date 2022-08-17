@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React from 'react'
 import Cookies from 'universal-cookie'
 import "../../../styles/user-specific/query-card.css"
 import {FaCheck} from 'react-icons/fa'
@@ -53,7 +53,7 @@ const UserQueryCard = (props) => {
     return (
         <>
             <div className="query-card">
-                <p className="query-card-username query-card-text">{props.username}</p>
+                <a href={"/user/"+props.username} className="query-card-username query-card-text">{props.username}</a>
                 <p className="query-card-name query-card-text">{props.firstname} {props.lastname}</p>
                 <p className="query-card-text">Followers: {props.followers}</p>
                 <p className="query-card-text">Following: {props.following}</p>

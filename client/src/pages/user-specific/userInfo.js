@@ -43,7 +43,7 @@ const UserInfo = () => {
         <div className="account-container">
         <h1 className="text-center">User information</h1>
             <div className="account-card">
-                <img src={profile_pic} className="user-pic" style={{row:1, column:1}} alt="profile-picture"/>
+                <img src={profile_pic} className="user-pic" style={{row:1, column:1}} alt="profile"/>
                 <h3 className="text-center user-info-text" style={{row:1, column:2, fontSize:24+"px"}}>Username: {userInfo['username']}</h3>
                 <h3 className="text-center user-info-text" style={{row:2, column:1}}>Name: {userInfo['first']} {userInfo['last']}</h3>
                 <h3 className="text-center user-info-text" style={{row:2, column:2}}>Following: {userInfo['following']}</h3>

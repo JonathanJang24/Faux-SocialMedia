@@ -15,6 +15,7 @@ const Post = (props) => {
             </div>
             <div className="row">
                 {props.user===currentUser ? <p className="col">{props.user}</p> : <a href={"/user/"+props.user} className="col">{props.user}</a>}
+                <p className="col">{props.date}</p>
             </div>
             <div className="row justify-content-center">
                 <p>{props.content}</p>

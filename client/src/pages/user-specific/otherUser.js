@@ -35,7 +35,7 @@ const OtherUser = () => {
     return currentUser===''||currentUser===undefined ? 
         <>
             <h1>Please login to view user profiles.</h1>
-            <a href="/login"></a>
+            <a href="/login">Go to Login</a>
         </>
     
     :(

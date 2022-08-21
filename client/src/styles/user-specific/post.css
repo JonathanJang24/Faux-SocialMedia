@@ -10,3 +10,10 @@
 .post-card:hover{
         transform: scale(105%)
 }
+
+.like-btn:hover{
+        color: #5366d0
+}
+.dislike-btn:hover{
+        color: #DB504A
+}

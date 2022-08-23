@@ -1,7 +1,7 @@
-import React,{useState} from 'react'
+import React,{useEffect, useState} from 'react'
 import '../../../styles/user-specific/post.css'
 import Cookies from 'universal-cookie'
-import {FaThumbsDown, FaThumbsUp} from 'react-icons/fa'
+import {FaCommentSlash, FaThumbsDown, FaThumbsUp} from 'react-icons/fa'
 
 const Post = (props) => {
 
@@ -11,13 +11,40 @@ const Post = (props) => {
 
     const [comment, setComment] = useState("")
 
+    const [commented, setCommented] = useState([])
+
+    useEffect(() => {
+        fetch(`/api/get_comments/${props.id}`)
+        .then(response => {
+            return response.json()
+        }).then(data => {
+            setCommented(data)
+            console.log(data)
+        })
+    },[])
+
     const changeComment = (event) => {
         setComment(event.target.value)
     }
 
     const postComment = (event) => {
         event.preventDefault()
-        console.log(comment)
+        fetch("/api/comment_post",{
+            method:'POST',
+            body:JSON.stringify({
+                user:currentUser,
+                content:comment,
+                id:props.id
+            }),
+            headers:{
+                'Content-type':'application/json; charset=UTF-8'
+            }
+        }).then(response => {
+            return response.json()
+        })
+        .then(message => {
+            console.log(message)
+        })
         setComment("")
     }
 
@@ -52,7 +79,12 @@ const Post = (props) => {
                 <form className="row d-flex p-2 flex-row" onSubmit={postComment}>
                     <input className="col-9 d-inline" type="text" value={comment} onChange={changeComment} placeholder="comment"/>
                     <input className="col-2 btn btn-primary d-inline" type="submit" value="Comment"/>
-                </form>      
+                </form>  
+                {commented.map(c => {
+                    return(
+                        <p>{c.user}: {c.content}</p>
+                    )
+                })}
         </div>
     )
 }

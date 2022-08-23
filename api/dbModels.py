@@ -38,10 +38,9 @@ class Friend(db.Model):
     def __str__(self):
         return f'{self.friend_id} {self.extender} {self.recipient} {self.start_date}'
 
-# =============================HAS NOT BEEN INIT==========================    
-# # db model for comments
-# class Comments(db.Model):
-#     comment_id = db.Column(db.Integer, primary_key=True)
-#     user = db.Column(db.Text, nullable=False)
-#     content = db.Column(db.Text, nullable=False)
-#     post_id = db.Column(db.Integer, nullable=False)
+# db model for comments
+class Comments(db.Model):
+    comment_id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    post_id = db.Column(db.Integer, nullable=False)

@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
-from dbModels import User, Post, Friend
+from dbModels import User, Post, Friend, Comments
 from sharedModels import db
 import bcrypt
 from datetime import date, timedelta
@@ -17,12 +17,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 #---------------------------------------------------------------
 
-
 @app.route('/')
 def index():
     feed = db.session.query(User).all()
     return jsonify(([*map(user_serializer,feed)]))
-    return {'200':'get successful.'}
 
 def username_serializer(user):
     return {
@@ -216,7 +214,25 @@ def interactpost():
 
 @app.route('/api/comment_post',methods=['POST'])
 def commentpost():
+    data = json.loads(request.data)
+    c = Comments(user=data['user'],content=data['content'],post_id=data['id'])
+    db.session.add(c)
+    db.session.commit()
+    print(data)
     return {'200':'comment posted'}
+
+def comment_serializer(comment):
+    return {
+        'comment_id':comment.comment_id,
+        'user':comment.user,
+        'content':comment.content,
+        'post_id':comment.post_id
+    }
+
+@app.route('/api/get_comments/<post_id>',methods=['GET'])
+def getcomments(post_id):
+    comments = db.session.query(Comments).filter_by(post_id=post_id).all()
+    return jsonify(([*map(comment_serializer,comments)]))
 
 if(__name__=='__main__'):
     app.run(debug=True)

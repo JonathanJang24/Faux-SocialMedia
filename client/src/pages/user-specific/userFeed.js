@@ -45,6 +45,7 @@ const UserFeed = () => {
                 return(
                     <Post 
                     key={post.post_id} 
+                    id={post.post_id}
                     user={post.user}
                     date={post.posted_date}
                     title={post.title}

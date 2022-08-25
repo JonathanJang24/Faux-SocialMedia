@@ -17,3 +17,12 @@
 .dislike-btn:hover{
         color: #DB504A
 }
+.trash-icon{
+    float:right;
+    font-size: 16px;
+    transition: transform .5 ease-in-out
+}
+.trash-icon:hover{
+        transform:scale(110%);
+        color: red;
+}

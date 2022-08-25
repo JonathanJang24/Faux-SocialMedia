@@ -1,7 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import '../../../styles/user-specific/post.css'
 import Cookies from 'universal-cookie'
-import {FaCommentSlash, FaThumbsDown, FaThumbsUp} from 'react-icons/fa'
+import {FaTrash, FaThumbsDown, FaThumbsUp} from 'react-icons/fa'
 
 const Post = (props) => {
 
@@ -13,15 +13,25 @@ const Post = (props) => {
 
     const [commented, setCommented] = useState([])
 
+    const updateFeed = props.updateFeed
+
     useEffect(() => {
         fetch(`/api/get_comments/${props.id}`)
         .then(response => {
             return response.json()
         }).then(data => {
             setCommented(data)
-            console.log(data)
         })
     },[])
+
+    const updateComments = () => {
+        fetch(`/api/get_comments/${props.id}`)
+        .then(response => {
+            return response.json()
+        }).then(data => {
+            setCommented(data)
+        })
+    }
 
     const changeComment = (event) => {
         setComment(event.target.value)
@@ -44,8 +54,10 @@ const Post = (props) => {
         })
         .then(message => {
             console.log(message)
+            updateComments()
         })
         setComment("")
+        
     }
 
     const likePost = (event) => {
@@ -58,10 +70,33 @@ const Post = (props) => {
         console.log("disliked")
     }
 
+    const deletePost = (event) => {
+        event.preventDefault()
+        const confirmBox = window.confirm(
+            "DO you really want to delete the post?"
+        )
+        if(confirmBox===true){
+            fetch('/api/rem_post',{
+                method: 'POST',
+                body: JSON.stringify({
+                    post_id:props.id
+                }),
+                headers:{
+                    'Content-type':'application/json; charset=UTF-8'
+                }
+            }).then(response => {
+                return response.json()
+            }).then(message => {
+                console.log(message)
+                updateFeed()
+            })
+        }
+    }
+
     return(
         <div className="post-card container ">
             <div className="row justify-content-center">
-                <h3>{props.title}</h3>
+                <h3>{props.title} {props.user===currentUser ? <FaTrash className="trash-icon" onClick={deletePost}/>: <></>}</h3>
             </div>
             <div className="row">
                 {props.user===currentUser ? <p className="col">{props.user}</p> : <a href={"/user/"+props.user} className="col">{props.user}</a>}
@@ -82,7 +117,7 @@ const Post = (props) => {
                 </form>  
                 {commented.map(c => {
                     return(
-                        <p>{c.user}: {c.content}</p>
+                        <p key={c.comment_id}>{c.user}: {c.content}</p>
                     )
                 })}
         </div>

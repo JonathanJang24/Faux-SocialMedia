@@ -35,6 +35,8 @@ const UserFeed = () => {
         })
     }
 
+
+
     return currentUser===''||currentUser===undefined ? <Navigate to="/login"/> : (
         <>
             <h1>Feed</h1>
@@ -45,6 +47,7 @@ const UserFeed = () => {
                 return(
                     <Post 
                     key={post.post_id} 
+                    updateFeed={updateFeed}
                     id={post.post_id}
                     user={post.user}
                     date={post.posted_date}

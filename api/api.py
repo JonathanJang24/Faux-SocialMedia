@@ -230,9 +230,21 @@ def comment_serializer(comment):
     }
 
 @app.route('/api/get_comments/<post_id>',methods=['GET'])
-def getcomments(post_id):
+def getComments(post_id):
     comments = db.session.query(Comments).filter_by(post_id=post_id).all()
     return jsonify(([*map(comment_serializer,comments)]))
+
+@app.route('/api/rem_post',methods=['POST'])
+def rempost():
+    data = json.loads(request.data)
+    post_id = data['post_id']
+    try:
+        db.session.query(Post).filter_by(post_id=post_id).delete()
+        db.session.query(Comments).filter_by(post_id=post_id).delete()
+        db.session.commit()
+        return {'200':"Post deleted!"}
+    except:
+        return{'400':"uh-oh, something went wrong and the post couldn't be deleted."}
 
 if(__name__=='__main__'):
     app.run(debug=True)

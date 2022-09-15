@@ -24,11 +24,11 @@
     font-size: 14px;
 }
 
-.follow-link{
+.view-follow{
     color: white
 }
 
-.follow-link:hover{
+.view-follow:hover{
     cursor: pointer;
     color: #D6EFFF
 }

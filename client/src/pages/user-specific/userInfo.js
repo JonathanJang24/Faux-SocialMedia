@@ -38,6 +38,14 @@ const UserInfo = () => {
         navigate(0)
     }
 
+    const viewFollowing = () => {
+        console.log("view following")
+    }
+
+    const viewFollowers = () => {
+        console.log("view followers")
+    }
+
     return currentUser===''||currentUser===undefined ? <Navigate to="/login"/> : (
         <>
         <div className="account-container">
@@ -46,9 +54,9 @@ const UserInfo = () => {
                 <img src={profile_pic} className="user-pic" style={{row:1, column:1}} alt="profile"/>
                 <h3 className="text-center user-info-text" style={{row:1, column:2, fontSize:24+"px"}}>Username: {userInfo['username']}</h3>
                 <h3 className="text-center user-info-text" style={{row:2, column:1}}>Name: {userInfo['first']} {userInfo['last']}</h3>
-                <h3 className="text-center user-info-text" style={{row:2, column:2}}>Following: {userInfo['following']}</h3>
+                <h3 onClick={viewFollowing} className="follow-link text-center user-info-text" style={{row:2, column:2}}>Following: {userInfo['following']}</h3>
                 <h3 className="text-center user-info-text" style={{row:3, column:1}}>Email: {userInfo['email']}</h3>
-                <h3 className="text-center user-info-text" style={{row:3, column:2}}>Followers: {userInfo['followers']}</h3>
+                <h3 onClick={viewFollowers} className="follow-link text-center user-info-text" style={{row:3, column:2}}>Followers: {userInfo['followers']}</h3>
                 <h3 className="text-center user-info-text" style={{row:4, column:1}}>Birthday: {userInfo['birthday']}</h3>
 
                 <button style={{row:4, column:2}} className="btn btn-primary logout-btn" onClick={handleLogout}>Logout</button>

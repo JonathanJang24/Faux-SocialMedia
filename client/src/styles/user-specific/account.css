@@ -23,3 +23,12 @@
 .user-info-text{
     font-size: 14px;
 }
+
+.follow-link{
+    color: white
+}
+
+.follow-link:hover{
+    cursor: pointer;
+    color: #D6EFFF
+}

@@ -1,6 +1,7 @@
 import React,{useEffect, useState} from 'react'
 import '../../../styles/user-specific/post.css'
 import Cookies from 'universal-cookie'
+import Comment from '../../user-specific/components/comment.js'
 import {FaTrash, FaThumbsDown, FaThumbsUp} from 'react-icons/fa'
 
 const Post = (props) => {
@@ -13,7 +14,7 @@ const Post = (props) => {
 
     const [commented, setCommented] = useState([])
 
-    const updateFeed = props.updateFeed
+    const updateFeed = props.update
 
     useEffect(() => {
         fetch(`/api/get_comments/${props.id}`)
@@ -57,7 +58,7 @@ const Post = (props) => {
             updateComments()
         })
         setComment("")
-        
+        updateFeed()
     }
 
     const likePost = (event) => {
@@ -73,7 +74,7 @@ const Post = (props) => {
     const deletePost = (event) => {
         event.preventDefault()
         const confirmBox = window.confirm(
-            "DO you really want to delete the post?"
+            "Do you really want to delete the post?"
         )
         if(confirmBox===true){
             fetch('/api/rem_post',{
@@ -96,7 +97,7 @@ const Post = (props) => {
     return(
         <div className="post-card container ">
             <div className="row justify-content-center">
-                <h3>{props.title} {props.user===currentUser ? <FaTrash className="trash-icon" onClick={deletePost}/>: <></>}</h3>
+                <h3>{props.title} {props.user===currentUser ? <FaTrash className="trash-icon-post" onClick={deletePost}/>: <></>}</h3>
             </div>
             <div className="row">
                 {props.user===currentUser ? <p className="col">{props.user}</p> : <a href={"/user/"+props.user} className="col">{props.user}</a>}
@@ -117,7 +118,13 @@ const Post = (props) => {
                 </form>  
                 {commented.map(c => {
                     return(
-                        <p key={c.comment_id}>{c.user}: {c.content}</p>
+                        <Comment
+                        key={c.comment_id}
+                        id = {c.comment_id}
+                        user={c.user}
+                        update = {updateFeed}
+                        content={c.content}
+                        />
                     )
                 })}
         </div>

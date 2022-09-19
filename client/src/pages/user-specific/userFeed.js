@@ -14,7 +14,6 @@ const UserFeed = () => {
     const [feed, setFeed] = useState([])
 
     useEffect(() => {  
-
         fetch(`/api/feed/${currentUser}`)
         .then(response => {
             return response.json()
@@ -47,7 +46,7 @@ const UserFeed = () => {
                 return(
                     <Post 
                     key={post.post_id} 
-                    updateFeed={updateFeed}
+                    update={updateFeed}
                     id={post.post_id}
                     user={post.user}
                     date={post.posted_date}

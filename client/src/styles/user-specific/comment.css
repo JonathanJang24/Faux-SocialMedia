@@ -1,0 +1,15 @@
+.comment-container p{
+    margin: 0;
+
+}
+
+.trash-icon-comment{
+    margin: 0;
+    padding: 0;
+    float: right;
+    transition: transform .5 ease-in-out
+}
+.trash-icon-comment:hover{
+    transform:scale(110%);
+    color: red;
+}

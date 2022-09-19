@@ -246,5 +246,16 @@ def rempost():
     except:
         return{'400':"uh-oh, something went wrong and the post couldn't be deleted."}
 
+@app.route('/api/rem_comment',methods=['POST'])
+def remcomment():
+    data = json.loads(request.data)
+    comment_id = data['comment_id']
+    try:
+        db.session.query(Comments).filter_by(comment_id=comment_id).delete()
+        db.session.commit()
+        return({'200':'Comment successfully deleted.'})
+    except:
+        return {'400':'uhoh, something went wrong and the comment could not be deleted'}
+
 if(__name__=='__main__'):
     app.run(debug=True)

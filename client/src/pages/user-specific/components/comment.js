@@ -9,7 +9,7 @@ const Comment = (props) => {
 
     const currentUser = cookies.get('user')
 
-    const updateFeed = props.update
+    const updateComments = props.update
 
     const deleteComment = () => {
         const confirmBox = window.confirm(
@@ -28,9 +28,7 @@ const Comment = (props) => {
                 return response.json()
             }).then(message=> {
                 console.log(message)
-
-                // This function is not working, and somehow needes to be called from the top level functio of 'user-feed.js'
-                updateFeed()
+                updateComments()
             })
         }
     }
@@ -38,8 +36,7 @@ const Comment = (props) => {
     return (
     <div className="comment-container">
         {/* add more conditions where comments on your own post can be deleted regardless of user*/}
-        <p><a href={"/user/"+props.user}>{props.user}</a>: {props.content}</p>
-        {props.user===currentUser ? <FaTrash className="trash-icon-comment" onClick={deleteComment}/>: <></>}
+        <p><a href={"/user/"+props.user}>{props.user}</a>: {props.content} {props.user===currentUser ? <FaTrash className="trash-icon-comment" onClick={deleteComment}/>: <></>}</p>
     </div>
     )
 }

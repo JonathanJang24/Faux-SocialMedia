@@ -122,7 +122,7 @@ const Post = (props) => {
                         key={c.comment_id}
                         id = {c.comment_id}
                         user={c.user}
-                        update = {updateFeed}
+                        update = {updateComments}
                         content={c.content}
                         />
                     )

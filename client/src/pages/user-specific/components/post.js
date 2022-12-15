@@ -63,12 +63,34 @@ const Post = (props) => {
 
     const likePost = (event) => {
         event.preventDefault()
-        console.log("liked")
+        fetch('/api/interact_post',{
+            method:'POST',
+            body:JSON.stringify({
+                user:currentUser,
+                post_id:props.id,
+                action:"like"
+            })
+        }).then(response => {
+            return response.json()
+        }).then(message => {
+            console.log(message)
+        })
     }
 
     const dislikePost = (event) => {
         event.preventDefault()
-        console.log("disliked")
+        fetch('/api/interact_post',{
+            method:'POST',
+            body:JSON.stringify({
+                user:currentUser,
+                post_id:props.id,
+                action:"dislike"
+            })
+        }).then(response => {
+            return response.json()
+        }).then(message => {
+            console.log(message)
+        })
     }
 
     const deletePost = (event) => {

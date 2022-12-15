@@ -2,10 +2,10 @@
 from flask import Flask, jsonify, request, json
 from flask_sqlalchemy import SQLAlchemy
 from decouple import config
-from dbModels import User, Post, Friend, Comments
+from dbModels import User, Post, Friend, Comments, Interactions
 from sharedModels import db
 import bcrypt
-from datetime import date, timedelta
+from datetime import date
 
 salt = bcrypt.gensalt()
 app = Flask(__name__)
@@ -16,6 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # have not created tables yet, might change table structure later
 db = SQLAlchemy(app)
 #---------------------------------------------------------------
+
 
 @app.route('/')
 def index():
@@ -206,11 +207,44 @@ def find_user(currUser,query):
                     i+=1
         return  {'400':'no results'} if queryList==None else jsonify(queryList)
     return {'400':'empty query.'}
-    
 
 @app.route('/api/interact_post',methods=['POST'])
 def interactpost():
-    return {'200':'post liked/disliked'}
+    # both like and dislike call this function, but there will be a string designated to the action
+    data = json.loads(request.data)
+    username = data['user']
+    post_id = data['post_id']
+
+    post = db.session.query(Post).filter_by(post_id=post_id).first()
+
+    exists = db.session.query(Interactions).filter_by(user=username, post_id=post_id).first()
+    #checks if the user has already intereacted the post before
+    if exists == None:
+        if(data['action']=='like'):
+            interaction = Interactions(post_id=post_id,user=username,interaction_type=1)
+            post.likes = int(post.likes)+1
+            db.session.add(interaction)
+            db.session.add(post)
+            db.session.commit()
+            return {'200':'post liked'}
+        elif(data['action']=='dislike'):
+            interaction = Interactions(post_id=post_id,user=username,interaction_type=2)
+            post.dislikes  = int(post.dislikes)+1
+            db.session.add(interaction)
+            db.session.add(post)
+            db.session.commit()
+            return {'200':'post disliked'}
+        else:
+            return {'400':'error, wrong action'}
+    # if the user has already interacted with the post
+    else:
+        if(data['action']=='like'):
+            pass
+        elif(data['action']=='dislike'):
+            pass
+        else:
+            return {'400':'error, wrong action'}
+
 
 @app.route('/api/comment_post',methods=['POST'])
 def commentpost():

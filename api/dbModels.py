@@ -22,11 +22,21 @@ class Post(db.Model):
     user = db.Column(db.Text, nullable=False)
     title = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text,nullable=False)
-    likes = db.Column(db.Text, nullable=False)
-    dislikes = db.Column(db.Text, nullable=False)
+    likes = db.Column(db.Integer, nullable=False)
+    dislikes = db.Column(db.Integer, nullable=False)
 
     def __str__(self):
         return f'{self.post_id} {self.user} {self.title} {self.content} {self.likes} {self.dislikes}'
+
+class Interactions(db.Model):
+    interaction_id = db.Column(db.Integer,primary_key=True)
+    post_id = db.Column(db.Integer,nullable=False)
+    user = db.Column(db.Text, nullable=False)
+    # 0 = none; 1 = like; 2 = dislike
+    interaction_type = db.Column(db.Integer, nullable=False)
+
+    def __str__(self):
+        return f'{self.interaction_id} {self.post_id} {self.user} {self.interaction_type}'
 
 # db model for friend
 class Friend(db.Model):
@@ -44,3 +54,6 @@ class Comments(db.Model):
     user = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
     post_id = db.Column(db.Integer, nullable=False)
+
+    def __str__(self):
+        return f'{self.comment_id} {self.user} {self.content} {self.post_id}'

@@ -1,5 +1,5 @@
 .post-card{
-        width: 600px;
+        width: 80%;
         background: white;
         color: black;
         margin: 50px auto;
@@ -10,12 +10,25 @@
 .post-card:hover{
         transform: scale(105%)
 }
-
 .like-btn:hover{
         color: #5366d0
 }
 .dislike-btn:hover{
         color: #DB504A
+}
+#unfollow-btn{
+        font-size: 10px;
+        margin-left: 10px;
+        background-color: rgb(255, 112, 112);
+        border: none;
+        padding: 2px;
+        border-radius: 5px;
+        color: white;
+        transition: transform .25s ease-in-out;
+}
+#unfollow-btn:hover{
+        transform: scale(103%);
+        background: rgb(255, 84, 84)
 }
 .trash-icon-post{
     float:right;

@@ -1,8 +1,15 @@
 .create-post-card{
-    width: 60%;
+    width: 80%;
     margin: 50px auto;
     background-color: white;
     color: black;
     padding: 25px;
     border-radius: 15px;
+}
+
+#create-post-content{
+}
+
+#create-post-btn{
+    margin-top: 10px
 }

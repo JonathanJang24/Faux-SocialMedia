@@ -47,10 +47,10 @@ const CreatePost = ({update}) => {
                         <input type="text" name="title" className="form-control" value={postData['title']}  onChange={handleChange} placeholder="Post Title" id="create-post-title"/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="create-post-content">Your thoughts...</label>
+                        <label htmlFor="create-post-content">Tell your friends something!</label>
                         <input type="text" name="content" value={postData['content']} onChange={handleChange}className="form-control" placeholder="What's on your mind?" id="create-post-content"/>
                     </div>
-                    <input className="btn btn-primary" type="submit"/>
+                    <input id="create-post-btn" className="btn btn-primary" type="submit"/>
                 </form>
             </div>
         </>

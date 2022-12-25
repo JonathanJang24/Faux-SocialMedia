@@ -34,6 +34,31 @@ const Post = (props) => {
         })
     }
 
+    const remFriend = (event) => {
+        event.preventDefault()
+        const confirmBox = window.confirm(
+            "Do you really want to unfriend "+props.user+"?"
+        )
+        if(confirmBox){
+            fetch('/api/rem_friend',{
+                method:'POST',
+                body: JSON.stringify({
+                    extender: currentUser,
+                    recipient: props.user
+                }),
+                headers:{
+                    'Content-type':'application/json; charset=UTF-8'
+                }
+            }).then(response => {
+                return response.json()
+            }).then(message => {
+                console.log(message)
+            })
+            updateFeed()
+        }
+    } 
+
+
     const changeComment = (event) => {
         setComment(event.target.value)
     }
@@ -124,7 +149,11 @@ const Post = (props) => {
                 <h3>{props.title} {props.user===currentUser ? <FaTrash className="trash-icon-post" onClick={deletePost}/>: <></>}</h3>
             </div>
             <div className="row">
-                {props.user===currentUser ? <p className="col">{props.user}</p> : <a href={"/user/"+props.user} className="col">{props.user}</a>}
+                <div className="col">
+                    <a href={"/user/"+props.user} className="col">{props.user}</a>
+
+                    {props.user===currentUser ? <></> : <button id="unfollow-btn" onClick={remFriend}>Unfollow</button>}
+                </div>
                 <p className="col">{props.date}</p>
             </div>
             <div className="row justify-content-center">

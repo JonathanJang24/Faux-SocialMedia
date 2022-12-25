@@ -1,3 +1,15 @@
 body{
     color: white
 }
+
+#feed-layout{
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+#side-panel{
+    grid-column-start: 1;
+}
+#main-panel{
+    grid-column-start: 2;
+
+}

@@ -168,7 +168,7 @@ def add_friend():
     return {'200':'Friend Added.'}
 
 @app.route('/api/rem_friend',methods=['POST'])
-def rem_riend():
+def rem_friend():
     data = json.loads(request.data)
     extender = data['extender']
     recipient = data['recipient']

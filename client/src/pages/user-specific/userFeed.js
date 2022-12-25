@@ -38,25 +38,29 @@ const UserFeed = () => {
 
     return currentUser===''||currentUser===undefined ? <Navigate to="/login"/> : (
         <>
-            <h1>Feed</h1>
+            <div id="feed-layout">
+                <div id="side-panel">
+                    <CreatePost update={updateFeed}/>
+                </div>
 
-            <CreatePost update={updateFeed}/>
-
-            {feed.map(post => {
-                return(
-                    <Post 
-                    key={post.post_id} 
-                    update={updateFeed}
-                    id={post.post_id}
-                    user={post.user}
-                    date={post.posted_date}
-                    title={post.title}
-                    content={post.content}
-                    likes={post.likes}
-                    dislikes={post.dislikes}
-                    />
-                )
-            })}
+                <div id="main-panel">
+                    {feed.map(post => {
+                        return(
+                            <Post 
+                            key={post.post_id} 
+                            update={updateFeed}
+                            id={post.post_id}
+                            user={post.user}
+                            date={post.posted_date}
+                            title={post.title}
+                            content={post.content}
+                            likes={post.likes}
+                            dislikes={post.dislikes}
+                            />
+                        )
+                    })}
+                </div>
+            </div>
         </>
     )
 }

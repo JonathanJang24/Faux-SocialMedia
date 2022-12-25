@@ -238,10 +238,37 @@ def interactpost():
             return {'400':'error, wrong action'}
     # if the user has already interacted with the post
     else:
+        interaction = db.session.query(Interactions).filter_by(post_id=post_id,user=username).first()
         if(data['action']=='like'):
-            pass
+            if(exists.interaction_type==1):
+                exists.interaction_type = 0
+                post.likes = int(post.likes)-1
+            else:
+                if(exists.interaction_type==2):
+                    post.dislikes = int(post.dislikes)-1
+                    post.likes = int(post.likes)+1
+                else:
+                    post.likes = int(post.likes)+1
+                exists.interaction_type = 1
+            db.session.add(interaction)
+            db.session.add(post)
+            db.session.commit()
+            return {'200':'post liked'}
         elif(data['action']=='dislike'):
-            pass
+            if(exists.interaction_type==2):
+                exists.interaction_type = 0
+                post.dislikes = int(post.dislikes)-1
+            else:
+                if(exists.interaction_type==1):
+                    post.dislikes = int(post.dislikes)+1
+                    post.likes = int(post.likes)-1
+                else:
+                    post.dislikes = int(post.dislikes)+1
+                exists.interaction_type = 2
+            db.session.add(interaction)
+            db.session.add(post)
+            db.session.commit()
+            return {'200':'post disliked'}
         else:
             return {'400':'error, wrong action'}
 

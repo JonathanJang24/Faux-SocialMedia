@@ -74,6 +74,7 @@ const Post = (props) => {
             return response.json()
         }).then(message => {
             console.log(message)
+            updateFeed()
         })
     }
 
@@ -90,6 +91,7 @@ const Post = (props) => {
             return response.json()
         }).then(message => {
             console.log(message)
+            updateFeed()
         })
     }
 

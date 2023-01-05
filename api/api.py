@@ -137,6 +137,18 @@ def user_info(currUser):
 
     return jsonify((user_info))
 
+@app.route('/api/get_followers/<currUser>',methods=['GET'])
+def get_followers(currUser):
+    followers = db.session.query(Friend).filter_by(recipient=currUser).all()
+    followers = [follower.extender for follower in followers]
+    return jsonify(followers)
+
+@app.route('/api/get_following/<currUser>',methods=['GET'])
+def get_following(currUser):
+    following = db.session.query(Friend).filter_by(extender=currUser).all()
+    following = [follow.recipient for follow in following]
+    return jsonify(following)
+
 
 @app.route('/api/user_post/<currUser>',methods=['GET'])
 def user_post(currUser):

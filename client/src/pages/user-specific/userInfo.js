@@ -39,11 +39,20 @@ const UserInfo = () => {
     }
 
     const viewFollowing = () => {
-        console.log("view following")
+        fetch(`/api/get_following/${currentUser}`).then(response => {
+            return response.json()
+        }).then(data => {
+            // eventually display the list to a popup
+            console.log(data)
+        })
     }
 
     const viewFollowers = () => {
-        console.log("view followers")
+        fetch(`/api/get_followers/${currentUser}`).then(response => {
+            return response.json()
+        }).then(data => {
+            console.log(data)
+        })
     }
 
     return currentUser===''||currentUser===undefined ? <Navigate to="/login"/> : (
